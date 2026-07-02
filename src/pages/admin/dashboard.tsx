@@ -27,7 +27,6 @@ interface DashboardStats {
   holdStudents: number;
 }
 
-
 interface RecentAttendance {
   id: string;
   session_date: string;
@@ -246,7 +245,15 @@ const Dashboard = () => {
 const formattedAttendance: RecentAttendance[] = (
   recentAttendanceResult.data ?? []
 ).map((item) => {
-  const schedule = item.schedule?.[0];
+  const schedule = item.schedule as unknown as {
+    student: {
+      full_name: string;
+    };
+
+    teacher: {
+      full_name: string;
+    };
+  };
 
   return {
     id: item.id,
@@ -256,17 +263,19 @@ const formattedAttendance: RecentAttendance[] = (
     schedule: {
       student: {
         full_name:
-          schedule?.student?.[0]?.full_name ?? "",
+          schedule.student.full_name,
       },
 
       teacher: {
         full_name:
-          schedule?.teacher?.[0]?.full_name ?? "",
+          schedule.teacher.full_name,
       },
     },
   };
 });
 
+setRecentAttendance(formattedAttendance);
+setRecentAttendance(formattedAttendance);
       setRecentAttendance(
         formattedAttendance
       );
